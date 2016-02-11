@@ -60,3 +60,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+生成的电子书/
+电子书临时资源库/
+.idea/
