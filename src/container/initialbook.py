@@ -16,7 +16,7 @@ class InitialBook(object):
                 ->info
                 ->article
                 ->info_extra
-                ->article_extra
+                ->article_extra             
         ->epub ->class Epub
                     ->article_count
                     ->char_count
@@ -31,18 +31,21 @@ class InitialBook(object):
     """
     class Sql(object):
         def __init__(self):
+
+            self.answer = ''
             self.info = ''
             self.article = ''
             self.info_extra = ''
             self.article_extra = ''      # 用来扩展的????
             return
 
-        def get_article_sql(self):
-            return self.article_extra + Config.sql_extend_answer_filter
+        def get_answer_sql(self):
+            return self.answer + Config.sql_extend_answer_filter
 
     class Epub(object):
         def __init__(self):
             self.article_count = 0
+            self.answer_count = 0
             self.char_count = 0
 
             self.title = ''
@@ -52,8 +55,8 @@ class InitialBook(object):
             return
 
     def __init__(self):
-        self.kind = 'balabala'
-        self.author_id = 0
+        self.kind = ''
+        self.author_id = 0                 
         self.sql = InitialBook.Sql()
         self.epub = InitialBook.Epub()
         self.info = {}
@@ -67,8 +70,8 @@ class InitialBook(object):
         从数据库中获取数据
         :return:
         """
-        self.catch_info()      # 获取博客信息
-        self.get_jianshu_list()         # 获取文章所有信息
+        self.catch_info()
+        self.get_article_list()         # 获取文章所有信息
         # self.__sort()       TODO
         return self
 
@@ -109,55 +112,41 @@ class InitialBook(object):
             self.epub.title = u'简书博文集锦({})'.format(info['title'])
             self.epub.id = info['id']       # TODO
 
-    def get_jianshu_list(self):
+    def get_article_list(self):
         if self.kind in Type.jianshu:      # TODO 目前只有一种情况
-            article_list = self.__get_jianshu_list()
+            article_list = self.__get_article_list()
         self.set_article_list(article_list)     # 原因如上
         return
 
-    def __get_jianshu_list(self):
-        jianshu_list = [DB.wrap('jianshu_info', x) for x in DB.get_result_list(self.sql.info)]
-        jianshu_article_list = [DB.wrap('jianshu_article', x) for x in DB.get_result_list(self.sql.article)]
+    def __get_article_list(self):
+        def add_property(article):
+            article['char_count'] = len(article['content'])
+            article['answer_count'] = 1
+            if self.kind == Type.jianshu:
+                article['agree_count'] = "没有赞同数" #article['agree']
+                article['update_date'] = article['publish_date']
+            return article
+        if self.kind == Type.jianshu:
+            article_list = [DB.wrap(Type.jianshu_article, x) for x in DB.get_result_list(self.sql.get_answer_sql())]
 
-
-        # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_list:" + str(SinaBlog_list))
-        # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_article_list[0]:" + str(SinaBlog_article_list[0]))
-
-        def merge_article_into_jianshu():
-            jianshu_dict = {item['creator_id']: {'jianshu': item.copy(), 'jianshu_article_list': [], }
-                             for item in jianshu_list}
-
-            for jianshu_article in jianshu_article_list:
-                jianshu_dict[jianshu_article['author_id']]['jianshu_article_list'].append(jianshu_article)
-            return jianshu_dict.values()
-
-        def add_property(jianshu):
-            char_count = 0
-            # TODO comment_count
-            for jianshu_article in jianshu['jianshu_article_list']:
-                jianshu_article['char_count'] = len(jianshu_article['content'])
-                jianshu_article['update_date'] = jianshu_article['publish_date']
-                char_count += jianshu_article['char_count']
-            jianshu['article_count'] = len(jianshu['jianshu_article_list'])
-            jianshu['char_count'] = char_count
-            return jianshu
-        article_list = [add_property(x) for x in merge_article_into_jianshu() if len(x['jianshu_article_list'])]
+        article_list = [add_property(x) for x in article_list]
         return article_list
 
     def set_article_list(self, article_list):
         self.clear_property()
-        for article in article_list:
-            self.epub.article_count += article['article_count']
-            self.epub.char_count += article['char_count']
-        # self.epub.article_count = len(article_list)     # 不然,一个博客就是一个article_count
+        if self.kind == Type.jianshu:      # jianshu类型
+            for article in article_list:
+                self.epub.answer_count += article['answer_count']
+                self.epub.char_count += article['char_count']
         self.article_list = article_list
         return
 
     def clear_property(self):
+        self.epub.answer_count = 0
         # self.epub.title = ''
         # self.epub.prefix = ''
-        self.epub.article_count = 0
         self.epub.char_count = 0
+        self.epub.article_count = 0
         return
 
 
@@ -169,7 +158,6 @@ class HtmlBookPackage(object):
         return
 
     def get_title(self):
-        title = ''.join([book.epub.title for book in self.book_list])
-        title = Match.fix_filename(title)    # 移除特殊字符
+        title = '_'.join([book.epub.title for book in self.book_list])
+        title = Match.fix_filename(title)  # 移除特殊字符
         return title
-

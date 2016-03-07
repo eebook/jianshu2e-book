@@ -56,6 +56,7 @@ class TaskPackage(object):
         book.author_id = book_list[0].author_id
         book.sql.info = 'select * from jianshu_info where ({})'.format(' or '.join(info_extra))
         book.sql.article = 'select * from jianshu_article where ({})'.format(' or '.join(article_extra))
+        book.sql.answer = 'select * from jianshu_article where ({})'.format(' or '.join(article_extra))
         self.book_list[book_type] = [book]
         return
 

@@ -67,12 +67,12 @@ class jianshu(object):
         Debug.logger.info(u"task_package.book_list.epub.title:" + str((task_package.book_list[Type.jianshu][0]).epub.title))
         Debug.logger.info(u"task_package.book_list.epub.id:" + str((task_package.book_list[Type.jianshu][0]).epub.id))
 
-        if not task_package.is_work_list_empty():
-
-            Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.jianshu][0]).sql.info))  #.sql.info))
-            Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.jianshu][0]).sql.article))
-            worker_factory(task_package.work_list)  # 执行抓取程序
-            Debug.logger.info(u"网页信息抓取完毕")
+        # if not task_package.is_work_list_empty():
+        #
+        #     Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.jianshu][0]).sql.info))  #.sql.info))
+        #     Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.jianshu][0]).sql.article))
+        #     worker_factory(task_package.work_list)  # 执行抓取程序
+        #     Debug.logger.info(u"网页信息抓取完毕")
 
         if not task_package.is_book_list_empty():
             Debug.logger.info(u"开始自数据库中生成电子书数据")
@@ -80,7 +80,7 @@ class jianshu(object):
             # Debug.logger.info(u"task_package.book_list的长度为:" + str(len(task_package.book_list)))
             # Debug.logger.info(u"task_package.book_list['question'][0].kind为:" + str((task_package.book_list['question'])[0].kind))
             # Debug.logger.info(u"task_package.book_list.sql.info:" + str((task_package.book_list['question'][0]).sql.info))
-            # Debug.logger.info(u"task_package.book_list.sql.answer:" + str((task_package.book_list['question'][0]).sql.answer))
+            Debug.logger.info(u"task_package.book_list.sql.answer:" + str((task_package.book_list['jianshu'][0]).sql.answer))
             # Debug.logger.info(u"task_package.book_list.sql.question:" + str((task_package.book_list['question'][0]).sql.question))
             # Debug.logger.info(u"task_package.book_list.sql.get_answer_sql:" + str((task_package.book_list['question'][0]).sql.get_answer_sql()))
             # Debug.logger.info(u"task_package.book_list.info:" + str((task_package.book_list['question'][0]).info))

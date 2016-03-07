@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from src.tools.debug import Debug
-from src.tools.type import Type
-from src.tools.match import Match
 from src.container.task import SingleTask, TaskPackage
+from src.tools.debug import Debug
+from src.tools.match import Match
+from src.tools.type import Type
 
 
 class ReadListParser():
@@ -14,18 +13,10 @@ class ReadListParser():
     @staticmethod
     def get_task(command):
         u"""
-        对外的接口, 用来分析指令
-        :param command:        网页的首地址
+        对外的接口, 用来分析指令,
+        :param command:   网页的首地址
         :return:
         """
-        def remove_comment(command):
-            u"""
-            去掉#后面的注释
-            :param command:
-            :return:
-            """
-            return command.split('#')[0]
-
         def split_command(command):
             u"""
             # 一行是一本书, 每一行用$符号来区分章节
@@ -33,6 +24,14 @@ class ReadListParser():
             :return:
             """
             return command.split('$')
+
+        def remove_comment(command):
+            u"""
+            去掉#后面的注释
+            :param command:
+            :return:
+            """
+            return command.split('#')[0]
 
         command = remove_comment(command)
         command_list = split_command(command)
@@ -53,7 +52,7 @@ class ReadListParser():
     @staticmethod
     def parse_command(raw_command=''):
         u"""
-
+        分析单条命令并返回待完成的task
         :param raw_command:   网址原始链接, 如:http://blog.sina.com.cn/u/1287694611
         :return: task
         task格式
@@ -96,9 +95,9 @@ class ReadListParser():
             task.book.author_id = jianshu_id
             # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
-        parse = {'jianshu': parse_jianshu}
+        parser = {'jianshu': parse_jianshu}
         kind = detect(raw_command)
-        return parse[kind](raw_command)
+        return parser[kind](raw_command)
 
     @staticmethod
     def merge_task_list(task_list):

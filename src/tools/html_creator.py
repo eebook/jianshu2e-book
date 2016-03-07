@@ -35,7 +35,6 @@ class HtmlCreator(object):
                 src = src.group(0)
                 if src.replace(' ', '') == '':
                     new_image = img + '</img>'
-                    print
                     content = content.replace(img, new_image)
                     continue
             src_download = HtmlCreator.fix_image_src(src)
@@ -58,7 +57,7 @@ class HtmlCreator(object):
         return content
 
     @staticmethod
-    def fix_image_src(href):          # TODO 这部分是针对知乎的
+    def fix_image_src(href):
         if Config.picture_quality == 0:
             return ''
         if 'equation?tex=' in href:  # tex图片需要额外加上http协议头
@@ -80,13 +79,12 @@ class HtmlCreator(object):
 
     def create_author_info(self, author_info):
         template = self.get_template('info', 'author')
-        # print u"author_info是" + str(author_info)       # TODO 这里不应该是info????
         return template.format(**author_info)
 
-    def wrap_title_info(self, title_image='', creator_name='', description='', creator_id='', **kwargs):
+    def wrap_title_info(self, title_image='', title='', description='', **kwargs):
         title_info = {
             'title_image': title_image,    # TODO
-            'title': creator_name,
+            'title': title,
             'description': description,
             'creator_id': creator_id,
         }
@@ -96,14 +94,14 @@ class HtmlCreator(object):
         template = self.get_template('info', 'title')
         return template.format(**title_info)
 
-    def create_article(self, article):
+    def create_answer(self, answer):
         result = {
-            'article_info': self.create_author_info(article),
-            'comment': self.create_comment_info(article),      # TODO 这里指的是数量????
-            'content': article['content']
+            'author_info': self.create_author_info(answer),
+            'comment': self.create_comment_info(answer),
+            'content': answer['content']
         }
 
-        template = self.get_template('question', 'answer')      # 暂时先用这个名字
+        template = self.get_template('question', 'answer')
         return template.format(**result)
 
     def create_jianshu(self, package, prefix=''):

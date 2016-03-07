@@ -63,7 +63,7 @@ class Book(object):
             book = copy.deepcopy(raw_book)
             book.set_article_list(article_list)
             book.epub.split_index = index
-            return [book] + split(raw_book, Config.max_article, index + 1)
+            return [book] + split(raw_book, Config.max_answer, index + 1)
 
         counter = 0
         book = []
@@ -71,18 +71,18 @@ class Book(object):
         # Debug.logger.info(u"raw_book_list的长度是???" + str(len(raw_book_list)))
         while len(raw_book_list):
             raw_book = raw_book_list.pop()
-            if not raw_book.epub.article_count:
+            if not raw_book.epub.answer_count:
                 # 若书中没有文章则直接跳过
                 continue
-            if (counter + raw_book.epub.article_count) < Config.max_article:
+            if (counter + raw_book.epub.answer_count) < Config.max_answer:
                 book.append(raw_book)
-            elif (counter + raw_book.epub.article_count) == Config.max_article:
+            elif (counter + raw_book.epub.answer_count) == Config.max_answer:
                 book.append(raw_book)
                 book_list.append(book)
                 book = []
                 counter = 0
-            elif (counter + raw_book.epub.article_count) > Config.max_article:
-                split_list = split(raw_book, Config.max_article - counter)
+            elif (counter + raw_book.epub.answer_count) > Config.max_answer:
+                split_list = split(raw_book, Config.max_answer - counter)
                 book.append(split_list[0])
                 book_list.append(book)
                 book = []
@@ -92,16 +92,17 @@ class Book(object):
         return book_list
 
     def book_to_html(self, book, index, creator):
-        if book.epub.split_index:       # 用来分卷???
+        if book.epub.split_index:
             book.epub.title += "_({})".format(book.epub.split_index)
 
         book.epub.prefix = index
 
-        page = creator.create_info_page(book)        # 这里跳转
+        page = creator.create_info_page(book)
         book.page_list.append(page)
+        # print u'article_list???' + str(book.article_list)
         for article in book.article_list:
             if book.kind in Type.jianshu:          # 目前只有SinaBlog这一种情况
-                page = creator.create_jianshu(article, index)              # 这里跳转
+                page = creator.create_article(article, index)              # 这里跳转
                 # print u"page.content是???" + str(page.content)
             else:       # 下面的代码暂时是不会执行的
                 page = creator.create_jianshu_single(article, index)
