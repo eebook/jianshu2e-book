@@ -6,15 +6,14 @@ from src.container.initialbook import InitialBook
 
 class Spider(object):
     def __init__(self):
-        self.href_latest_articles = ''
+        self.href = ''
         return
-
 
 class SingleTask(object):
     u"""
     任务信息以对象属性方式进行存储
-
     """
+
     def __init__(self):
         self.kind = ''
         self.spider = Spider()
@@ -35,7 +34,7 @@ class TaskPackage(object):
     def add_task(self, single_task=SingleTask()):
         if single_task.kind not in self.work_list:
             self.work_list[single_task.kind] = []
-        self.work_list[single_task.kind].append(single_task.spider.href_latest_articles)
+        self.work_list[single_task.kind].append(single_task.spider.href)
 
         if single_task.kind not in self.book_list:
             self.book_list[single_task.kind] = []

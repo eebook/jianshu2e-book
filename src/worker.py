@@ -38,13 +38,9 @@ class PageWorker(object):
 
     @staticmethod
     def parse_max_page(content):
-        u"""
-        :param content: 博客目录的页面内容
-        :return:
-        """
         max_page = 1
         try:
-            floor = content.index('">下一页</a>')
+            floor = content.index('">下一页</a></span>')
             floor = content.rfind('</a>', 0, floor)
             cell = content.rfind('>', 0, floor)
             max_page = int(content[cell + 1:floor])
@@ -248,3 +244,4 @@ def worker_factory(task):
     for key in task:
         worker = type_list[key](task[key])
         worker.start()
+    return

@@ -21,10 +21,10 @@ class HtmlCreator(object):
         content = Match.fix_html(content)
         for img in re.findall(r'<img[^>]*', content):
             # fix img
-            # if img[-1] == '/':
-            #     print u"修改前,img为:" + str(img)
-            #     img = img[:-1]
-            #     print u"修改后,img为:" + str(img)
+            if img[-1] == '/':
+                # print u"修改前,img为:" + str(img)
+                img = img[:-1]
+                # print u"修改后,img为:" + str(img)
             img += '>'
             src = re.search(r'(?<=src=").*?(?=")', img)
             if not src:
@@ -54,6 +54,7 @@ class HtmlCreator(object):
 
             new_image += '</img>'
             content = content.replace(img, '<div class="duokan-image-single">{}</div>'.format(new_image))
+
         return content
 
     @staticmethod
@@ -86,7 +87,6 @@ class HtmlCreator(object):
             'title_image': title_image,    # TODO
             'title': title,
             'description': description,
-            'creator_id': creator_id,
         }
         return title_info
 
@@ -100,36 +100,29 @@ class HtmlCreator(object):
             'comment': self.create_comment_info(answer),
             'content': answer['content']
         }
-
         template = self.get_template('question', 'answer')
         return template.format(**result)
 
-    def create_jianshu(self, package, prefix=''):
-        jianshu = package['jianshu']        #
-        # Debug:
-        article_list = package['jianshu_article_list']
-        # print u"在create_question中, article是什么???" + str(article_list)
-        # print (u"在create_question中, question是什么???" + str(jianshu))
-        article_content = ''.join([self.create_article(article) for article in package['jianshu_article_list']])
-        title_info = self.wrap_title_info(**jianshu)
-        # print u"在crate_jianshu中, jianshu_Info为:" + str(jianshu)
-        # print u"在crate_jianshu中, title_info为:" + str(title_info)
-        title_info['title'] = title_info['title'] + u"(ID{creator_id})的简书".format(**title_info)
-        jianshu['jianshu_article_list'] = article_content
-        jianshu['jianshu'] = self.get_template('info', 'title').format(**title_info)
+    def create_article(self, article, prefix=''):
+        article['edit_date'] = article['publish_date']
+        article['description'] = ''
+        article['agree'] = 'wu'
+        # article['title_image'] = 'wu'
         result = {
-            'body': self.get_template('question', 'question').format(**jianshu),
-            'title': jianshu['creator_name']
+            'answer': self.create_answer(article),
+            'question': self.get_template('info', 'title').format(**article)
         }
-
+        question = self.get_template('question', 'question').format(**result)
+        result = {
+            'body': question,
+            'title': article['title'],
+        }
         content = self.get_template('content', 'base').format(**result)
         page = Page()
         page.content = self.fix_image(content)
-        # print u"page.content是???" + str(page.content)
-        page.filename = str(prefix) + '_' + str(jianshu['creator_id']) + '.xhtml'
-        page.title = jianshu['creator_name'] + u"的博客"
+        page.filename = str(prefix) + '_' + str(article['article_id']) + '.xhtml'
+        page.title = article['title']
         return page
-
 
     def wrap_front_page_info(self, kind, info):
         result = {}

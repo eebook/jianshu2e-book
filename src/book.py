@@ -19,7 +19,6 @@ class Book(object):
     """
 
     def __init__(self, raw_sql_book_list):
-        # Debug.logger.debug(u"what the fuck")
         # Debug.logger.info("raw_sql_book['SinaBlog'][0].sql.info:" + str(raw_sql_book_list['SinaBlog'][0].sql.info))
         raw_book_list = [book.catch_data() for book in self.flatten(raw_sql_book_list)]
         Debug.logger.info(u"raw_book_list[0].kind是什么鬼?" + str(raw_book_list[0].kind))
@@ -36,7 +35,7 @@ class Book(object):
         # Debug.logger.debug("book_list是??" + str(book_list))
         print u"执行前, book_list为:" + str(book_list)
         self.book_list = [self.create_book_package(book) for book in book_list]
-        print (u"执行后, book_list为:" + str(book_list))
+        # print (u"执行后, book_list为:" + str(book_list))
         return
 
     @staticmethod
@@ -68,7 +67,7 @@ class Book(object):
         counter = 0
         book = []
         book_list = []
-        # Debug.logger.info(u"raw_book_list的长度是???" + str(len(raw_book_list)))
+        raw_book_list.reverse()  # 后边要使用pop，所以提前反转一下，以保证顺序不变
         while len(raw_book_list):
             raw_book = raw_book_list.pop()
             if not raw_book.epub.answer_count:
@@ -103,7 +102,6 @@ class Book(object):
         for article in book.article_list:
             if book.kind in Type.jianshu:          # 目前只有SinaBlog这一种情况
                 page = creator.create_article(article, index)              # 这里跳转
-                # print u"page.content是???" + str(page.content)
             else:       # 下面的代码暂时是不会执行的
                 page = creator.create_jianshu_single(article, index)
             book.page_list.append(page)
@@ -113,14 +111,14 @@ class Book(object):
         u"""
 
         :param book_list:
-        :return: HtmlBookPacakage()
+        :return: HtmlBookPackage()
         """
         index = 0
         epub_book_list = []
         image_container = ImageContainer()
         creator = HtmlCreator(image_container)
         for book in book_list:
-            epub_book = self.book_to_html(book, index, creator)     # 从这里跳转
+            epub_book = self.book_to_html(book, index, creator)
             epub_book_list.append(epub_book)
             index += 1
 
@@ -139,7 +137,7 @@ class Book(object):
             # 电子书题目为空时自动跳过
             # 否则会发生『rm -rf / 』的惨剧
             return
-        Path.chdir(Path.base_path + u'/电子书临时资源库/简书')
+        Path.chdir(Path.base_path + u'/电子书临时资源库')
         epub = Epub(title)
         html_tmp_path = Path.html_pool_path + u'/'
         image_tmp_path = Path.image_pool_path + u'/'
@@ -149,11 +147,13 @@ class Book(object):
         epub.add_css(Path.base_path + u'/www/css/markdown.css')
         epub.add_css(Path.base_path + u'/www/css/customer.css')
         epub.add_css(Path.base_path + u'/www/css/normalize.css')
-        epub.add_css(Path.base_path + u'/www/css/article.css')
+        epub.add_css(Path.base_path + u'/www/css/bootstrap.css')
         for book in book_package.book_list:
             page = book.page_list[0]
             with open(html_tmp_path + page.filename, u'w') as html:
                 html.write(page.content)
+            if '_' in page.title:
+                page.title = ''.join(page.title.split('_')[1:])  # 删除章节前缀
             epub.create_chapter(html_tmp_path + page.filename, page.title)
             for page in book.page_list[1:]:
                 with open(html_tmp_path + page.filename, u'w') as html:
@@ -189,7 +189,7 @@ class Book(object):
         Path.copy(Path.www_css + u'/customer.css', u'./customer.css')
         Path.copy(Path.www_css + u'/markdown.css', u'./markdown.css')
         Path.copy(Path.www_css + u'/normalize.css', u'./normalize.css')
-        Path.copy(Path.www_css + u'/article.css', u'./article.css')
+        Path.copy(Path.www_css + u'/article.css', u'./article.css')         # TODO: 需要精简
         Path.reset_path()
         return
 

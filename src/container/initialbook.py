@@ -99,7 +99,6 @@ class InitialBook(object):
         info = {}
         info['creator_name'] = '_'.join([str(item['creator_name']) for item in info_list])  # 可以是多个博客组合在一起
         info['creator_id'] = '_'.join([str(item['creator_id']) for item in info_list])
-        Debug.logger.info(u"catch_jianshu_book_info中的info:" + str(info))
         return info
 
     def set_info(self, info):

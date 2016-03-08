@@ -46,7 +46,6 @@ class ReadListParser():
         for item in range(len(raw_task_list)):
             Debug.logger.debug(u"raw_task_list是" + str(raw_task_list[item].book.author_id))
         task_package = ReadListParser.merge_task_list(raw_task_list)
-
         return task_package
 
     @staticmethod
@@ -88,14 +87,21 @@ class ReadListParser():
 
             task.author_id = jianshu_id
             task.kind = 'jianshu'
-            task.spider.href_latest_articles = 'http://www.jianshu.com/users/{}/latest_articles'.format(jianshu_id)
+            task.spider.href = 'http://www.jianshu.com/users/{}/latest_articles'.format(jianshu_id)
             task.book.kind = 'jianshu'
             task.book.sql.info_extra = 'creator_id = "{}"'.format(jianshu_id)
             task.book.sql.article_extra = 'author_id = "{}"'.format(jianshu_id)
             task.book.author_id = jianshu_id
             # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
-        parser = {'jianshu': parse_jianshu}
+
+        def parse_error(command):
+            if command:
+                Debug.logger.info(u"""无法解析记录:{}所属网址类型,请检查后重试。""".format(command))
+            return
+
+        parser = {'jianshu': parse_jianshu,
+                  'unknown': parse_error}
         kind = detect(raw_command)
         return parser[kind](raw_command)
 
