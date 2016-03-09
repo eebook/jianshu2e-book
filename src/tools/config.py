@@ -12,16 +12,12 @@ class Config(object):
     # 全局变量
     update_time = '2016-01-01'  # 更新日期, TODO:暂时用不到到
 
-    debug = True
-
-    account = 'zhihu2ebook@hotmail.com'  # 账号密码, TODO:暂时没有用到
-    password = 'Zhihu2Ebook'
-    remember_account = False  # 是否使用已有密码
+    debug = False
 
     max_thread = 10         # 最大线程数
     picture_quality = 1     # 图片质量（0/1/2，无图/标清/原图）TODO:暂时没有用到
-    max_blog = 10          # 每本电子书中最多可以放多少个博客
-    max_answer = 600       # 每本电子书中最多可以放多少篇文章
+    max_blog = 10           # 每本电子书中最多可以放多少个博客 TODO:暂时没有用到
+    max_answer = 600        # 每本电子书中最多可以放多少篇文章
 
     max_try = 5             # 最大尝试次数
     timeout_download_picture = 10

@@ -81,7 +81,6 @@ print content
 # article_num = soup.select('ul.clearfix li b')
 # if not article_num:
 #     print u"没有找到文章的数量"
-#     # TODO: 变量名可以改一下
 # article_num = article_num[2].get_text()      # 第3个是文章数量
 # print article_num
 
@@ -95,7 +94,6 @@ print content
 # # print u"creator_name???" + str(creator_name)
 # if not creator_name:
 #     print (u"没有找到博主姓名")
-#     # TODO: 变量命名可以改一下
 # creator_name = creator_name[0].get_text().replace(' ', '').replace('\n', '').replace('\t', '').replace('\r', '')
 # print "creator_name为:" + str(creator_name)
 

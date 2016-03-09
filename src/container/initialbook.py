@@ -85,7 +85,7 @@ class InitialBook(object):
             if self.kind == Type.jianshu:
                 info = self.catch_jianshu_book_info()
         self.set_info(info)           # TODO   暂时还没有其他种类
-        Debug.logger.info(u"catch_info中的info为:" + str(info))
+        Debug.logger.debug(u"catch_info中的info为:" + str(info))
         return
 
     def catch_jianshu_book_info(self):
@@ -105,11 +105,10 @@ class InitialBook(object):
         self.info.update(info)
         if self.kind == Type.jianshu:              # 该博客所有的博文
             self.epub.title = u'简书_{}({})'.format(info['creator_name'], info['creator_id'])
-            print (u"self.epub.title没有设置???" + str(self.epub.title))
             self.epub.id = info['creator_id']
         elif self.kind == Type.jianshu_article:    # 单篇博文 TODO
             self.epub.title = u'简书博文集锦({})'.format(info['title'])
-            self.epub.id = info['id']       # TODO
+            self.epub.id = info['id']
 
     def get_article_list(self):
         if self.kind in Type.jianshu:      # TODO 目前只有一种情况

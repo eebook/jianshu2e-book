@@ -43,10 +43,10 @@ class TaskPackage(object):
 
     def get_task(self):
         if Type.jianshu in self.book_list:
-            self.merge_article_book_list(Type.jianshu)
+            self.merge_jianshu_article_book_list(Type.jianshu)
         return self
 
-    def merge_article_book_list(self, book_type):
+    def merge_jianshu_article_book_list(self, book_type):
         book_list = self.book_list[Type.jianshu]
         book = InitialBook()
         info_extra = [item.sql.info_extra for item in book_list]
@@ -60,13 +60,13 @@ class TaskPackage(object):
         return
 
     def is_work_list_empty(self):
-        for kind in Type.type_list:             # 目前只有latest_article一种
+        for kind in Type.jianshu_type_list:             # 目前只有latest_article一种
             if self.work_list.get(kind):
                 return False
         return True
 
     def is_book_list_empty(self):
-        for kind in Type.type_list:
+        for kind in Type.jianshu_type_list:
             if self.book_list.get(kind):
                 return False
         return True

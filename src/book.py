@@ -19,29 +19,25 @@ class Book(object):
     """
 
     def __init__(self, raw_sql_book_list):
-        # Debug.logger.info("raw_sql_book['SinaBlog'][0].sql.info:" + str(raw_sql_book_list['SinaBlog'][0].sql.info))
         raw_book_list = [book.catch_data() for book in self.flatten(raw_sql_book_list)]
-        Debug.logger.info(u"raw_book_list[0].kind是什么鬼?" + str(raw_book_list[0].kind))
-        Debug.logger.info(u"raw_book_list[0].epub.article_count是什么鬼?" + str(raw_book_list[0].epub.article_count))
-        Debug.logger.info(u"raw_book_list[0].epub.char_count是什么鬼?" + str(raw_book_list[0].epub.char_count))
-        Debug.logger.info(u"raw_book_list[0].epub.title是什么鬼?" + str(raw_book_list[0].epub.title))
-        Debug.logger.info(u"raw_book_list[0].epub.id是什么鬼?" + str(raw_book_list[0].epub.id))
-        Debug.logger.info(u"raw_book_list[0].epub.split_index是什么鬼?" + str(raw_book_list[0].epub.split_index))
-        Debug.logger.info(u"raw_book_list[0].epub.prefix?" + str(raw_book_list[0].epub.prefix))
-        Debug.logger.info(u"raw_book_list[0].page_list" + str(raw_book_list[0].page_list))
-        # Debug.logger.info(u"raw_book_list[0].article_list" + str(raw_book_list[0].article_list))
+        Debug.logger.debug(u"raw_book_list[0].kind是什么鬼?" + str(raw_book_list[0].kind))
+        Debug.logger.debug(u"raw_book_list[0].epub.article_count是什么鬼?" + str(raw_book_list[0].epub.article_count))
+        Debug.logger.debug(u"raw_book_list[0].epub.char_count是什么鬼?" + str(raw_book_list[0].epub.char_count))
+        Debug.logger.debug(u"raw_book_list[0].epub.title是什么鬼?" + str(raw_book_list[0].epub.title))
+        Debug.logger.debug(u"raw_book_list[0].epub.id是什么鬼?" + str(raw_book_list[0].epub.id))
+        Debug.logger.debug(u"raw_book_list[0].epub.split_index是什么鬼?" + str(raw_book_list[0].epub.split_index))
+        Debug.logger.debug(u"raw_book_list[0].epub.prefix?" + str(raw_book_list[0].epub.prefix))
+        Debug.logger.debug(u"raw_book_list[0].page_list" + str(raw_book_list[0].page_list))
+        Debug.logger.debug(u"raw_book_list[0].article_list" + str(raw_book_list[0].article_list))
 
         book_list = self.volume_book(raw_book_list)
-        # Debug.logger.debug("book_list是??" + str(book_list))
-        print u"执行前, book_list为:" + str(book_list)
         self.book_list = [self.create_book_package(book) for book in book_list]
-        # print (u"执行后, book_list为:" + str(book_list))
         return
 
     @staticmethod
     def flatten(task_list):
         book_list = []
-        for kind in Type.type_list:
+        for kind in Type.jianshu_type_list:
             if kind in task_list:
                 book_list += task_list[kind]
         return book_list
@@ -189,7 +185,7 @@ class Book(object):
         Path.copy(Path.www_css + u'/customer.css', u'./customer.css')
         Path.copy(Path.www_css + u'/markdown.css', u'./markdown.css')
         Path.copy(Path.www_css + u'/normalize.css', u'./normalize.css')
-        Path.copy(Path.www_css + u'/article.css', u'./article.css')         # TODO: 需要精简
+        epub.add_css(Path.base_path + u'/www/css/bootstrap.css')
         Path.reset_path()
         return
 

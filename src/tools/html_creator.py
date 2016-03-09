@@ -43,8 +43,7 @@ class HtmlCreator(object):
             else:
                 filename = ''
             # print u"src是什么?????" + str(src)
-            # TODO:注意下面这种写法是有问题的, 如果是:http://www.jianshu.com/p/aec7fc39292c, 第一张图就会出问题
-            new_image = img.replace('"{}"'.format(src), '"./images/{}"'.format(filename))
+            new_image = img.replace('"{}"'.format(src), '"../images/{}"'.format(filename))
             new_image = new_image.replace('data-original-src', 'temppicsr')
             new_image = new_image.replace('src', 'falsesrc')
             new_image = new_image.replace('temppicsr', 'src')    # 应该有更好的方式, 暂时先这样写
@@ -84,7 +83,7 @@ class HtmlCreator(object):
 
     def wrap_title_info(self, title_image='', title='', description='', **kwargs):
         title_info = {
-            'title_image': title_image,    # TODO
+            'title_image': title_image,
             'title': title,
             'description': description,
         }
@@ -128,7 +127,7 @@ class HtmlCreator(object):
         result = {}
         if kind == Type.jianshu:
             result['title'] = u'简书文章集锦'
-            result['description'] = u'TODO'
+            result['description'] = u' '      # TODO
         return result
 
     def create_info_page(self, book):
