@@ -24,6 +24,8 @@ class Config(object):
     timeout_download_html = 5
     sql_extend_answer_filter = ''  # 附加到answer_sql语句后，用于对answer进行进一步的筛选（示例: and(agree > 5) ）
 
+    article_order_by_desc = True     # 若为True, 最新的一篇排在第一
+
     @staticmethod
     def _save():
         with open(Path.config_path, 'w') as f:
@@ -40,8 +42,6 @@ class Config(object):
         with open(Path.config_path) as f:
             config = json.load(f)
             if not config.get('remember_account'):
-                # 当选择不记住密码时，跳过读取，使用默认设置
-                # 不考虑用户强行在配置文件中把account改成空的情况
                 return
         for (key, value) in config.items():
             setattr(Config, key, value)

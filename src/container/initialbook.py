@@ -72,7 +72,7 @@ class InitialBook(object):
         """
         self.catch_info()
         self.get_article_list()         # 获取文章所有信息
-        # self.__sort()       TODO
+        self.__sort()
         return self
 
     def catch_info(self):
@@ -145,6 +145,13 @@ class InitialBook(object):
         self.epub.char_count = 0
         self.epub.article_count = 0
         return
+
+    def __sort(self):
+        if self.kind in Type.jianshu_article:
+            self.sort_article()
+
+    def sort_article(self):
+        self.article_list.sort(key=lambda x: (x['author_id'], x['update_date']), reverse=Config.article_order_by_desc)
 
 
 class HtmlBookPackage(object):

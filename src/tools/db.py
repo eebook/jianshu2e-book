@@ -40,7 +40,6 @@ class DB(object):
 
     @staticmethod
     def get_result_list(sql):
-        Debug.logger.debug(sql)
         result = DB.cursor.execute(sql).fetchall()
         return result
 
