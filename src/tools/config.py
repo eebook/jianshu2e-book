@@ -10,9 +10,9 @@ class Config(object):
     用于储存、获取设置值、全局变量值
     """
     # 全局变量
-    update_time = '2016-01-01'  # 更新日期, TODO:暂时用不到到
+    update_time = '2016-01-01'  # 更新日期, TODO:暂时用不到
 
-    debug = False
+    debug = True
 
     max_thread = 10         # 最大线程数
     picture_quality = 1     # 图片质量（0/1/2，无图/标清/原图）TODO:暂时没有用到
@@ -46,9 +46,3 @@ class Config(object):
         for (key, value) in config.items():
             setattr(Config, key, value)
         return
-
-# test_config = Config()
-# print test_config._config_store
-# test_config._sync()
-# print test_config._config_store
-# test_config._save()
