@@ -36,7 +36,7 @@ class InitialBook(object):
             self.info = ''
             self.article = ''
             self.info_extra = ''
-            self.article_extra = ''      # 用来扩展的????
+            self.article_extra = ''
             return
 
         def get_answer_sql(self):
@@ -85,7 +85,6 @@ class InitialBook(object):
             if self.kind == Type.jianshu:
                 info = self.catch_jianshu_book_info()
         self.set_info(info)           # TODO   暂时还没有其他种类
-        Debug.logger.debug(u"catch_info中的info为:" + str(info))
         return
 
     def catch_jianshu_book_info(self):

@@ -65,3 +65,4 @@ target/
 电子书临时资源库/
 .idea/
 *.sqlite
+src/doc

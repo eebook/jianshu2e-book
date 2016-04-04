@@ -8,6 +8,7 @@ from src.tools.type import Type
 class ReadListParser():
     u"""
     通过分析指令, 获得TaskPackage对象, 其中,有work_list={}和book_list{}
+    work_list存放的是网址,用来抓取内容, book_list用来生成电子书
     """
 
     @staticmethod
@@ -42,9 +43,6 @@ class ReadListParser():
             if raw_task:
                 raw_task_list.append(raw_task)
 
-        Debug.logger.debug(u"raw_task_list的长度为:" + str(len(raw_task_list)))
-        for item in range(len(raw_task_list)):
-            Debug.logger.debug(u"raw_task_list是" + str(raw_task_list[item].book.author_id))
         task_package = ReadListParser.merge_task_list(raw_task_list)
         return task_package
 
@@ -53,7 +51,7 @@ class ReadListParser():
         u"""
         分析单条命令并返回待完成的task
         :param raw_command:   网址原始链接, 如:http://blog.sina.com.cn/u/1287694611
-        :return: task
+        :return: task -> SingleTask()
         task格式
         *   kind
             *   字符串，见TypeClass.type_list
@@ -82,7 +80,6 @@ class ReadListParser():
             """
             result = Match.jianshu(command)
             jianshu_id = result.group('jianshu_id')
-            Debug.logger.debug(u"jianshu_id:" + str(jianshu_id))
             task = SingleTask()
 
             task.author_id = jianshu_id
@@ -92,7 +89,6 @@ class ReadListParser():
             task.book.sql.info_extra = 'creator_id = "{}"'.format(jianshu_id)
             task.book.sql.article_extra = 'author_id = "{}"'.format(jianshu_id)
             task.book.author_id = jianshu_id
-            # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
 
         def parse_error(command):
@@ -109,6 +105,5 @@ class ReadListParser():
     def merge_task_list(task_list):
         task_package = TaskPackage()
         for item in task_list:
-            Debug.logger.debug(u"merge_task_list中的item是什么???" + str(item))
             task_package.add_task(item)
         return task_package.get_task()

@@ -10,13 +10,13 @@ class Config(object):
     用于储存、获取设置值、全局变量值
     """
     # 全局变量
-    update_time = '2016-01-01'  # 更新日期, TODO:暂时用不到
+    update_time = '2016-01-01'  # 更新日期, TODO: 暂时没用到
 
     debug = True
 
     max_thread = 10         # 最大线程数
-    picture_quality = 1     # 图片质量（0/1/2，无图/标清/原图）TODO:暂时没有用到
-    max_blog = 10           # 每本电子书中最多可以放多少个博客 TODO:暂时没有用到
+    picture_quality = 1     # 图片质量（0/1/2，无图/标清/原图）   TODO:暂时没有用到
+    max_blog = 10           # 每本电子书中最多可以放多少个博客     TODO:暂时没有用到
     max_answer = 600        # 每本电子书中最多可以放多少篇文章
 
     max_try = 5             # 最大尝试次数

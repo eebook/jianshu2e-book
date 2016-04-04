@@ -48,7 +48,8 @@ class Path(object):
         try:
             os.mkdir(path)
         except OSError:
-            # Debug.logger.debug(u'指定目录已存在')
+            from src.tools.debug import Debug
+            Debug.logger.debug(u'指定目录' + str(path) + u'已存在')
             pass
         return
 
@@ -62,7 +63,8 @@ class Path(object):
         try:
             os.chdir(path)
         except OSError:
-            # Debug.logger.debug(u'指定目录不存在，自动创建之')
+            from src.tools.debug import Debug
+            Debug.logger.debug(u'指定目录不存在，自动创建之')
             Path.mkdir(path)
             os.chdir(path)
         return
@@ -81,7 +83,8 @@ class Path(object):
     @staticmethod
     def copy(src, dst):
         if not os.path.exists(src):
-            # Debug.logger.info('{}不存在，自动跳过'.format(src))
+            from src.tools.debug import Debug
+            Debug.logger.info('{}不存在，自动跳过'.format(src))
             return
         if os.path.isdir(src):
             shutil.copytree(src, dst)
@@ -96,7 +99,7 @@ class Path(object):
     @staticmethod
     def init_base_path():
         u"""
-        初始化路径,不需要实例化 Path 就能执行
+        初始化路径,不需要实例化 用Path就能直接执行
         :return:
         """
         Path.base_path = Path.get_pwd()

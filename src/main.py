@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 
-
 from src.tools.path import Path
-
 from src.book import Book
 from src.tools.config import Config
 from src.tools.debug import Debug
@@ -24,7 +22,7 @@ class jianshu(object):
         return
 
     @staticmethod
-    def init_config():       # TODO 输出提示语之类的
+    def init_config():
         Config._save()
         return
 
@@ -53,7 +51,7 @@ class jianshu(object):
         task_package = ReadListParser.get_task(command)  # 分析命令
 
         if not task_package.is_work_list_empty():
-            worker_factory(task_package.work_list)  # 执行抓取程序
+            # worker_factory(task_package.work_list)  # 执行抓取程序
             Debug.logger.info(u"网页信息抓取完毕")
 
         if not task_package.is_book_list_empty():

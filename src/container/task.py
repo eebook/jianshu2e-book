@@ -23,7 +23,7 @@ class SingleTask(object):
 
 class TaskPackage(object):
     u"""
-    work_list: kind->single_task.href_index
+    work_list: kind->single_task.spider_href
     book_list: kind->single_task.book
     """
     def __init__(self):
@@ -42,11 +42,21 @@ class TaskPackage(object):
         return
 
     def get_task(self):
+        u"""
+
+        :return: TaskPackage
+        """
         if Type.jianshu in self.book_list:
             self.merge_jianshu_article_book_list(Type.jianshu)
         return self
 
     def merge_jianshu_article_book_list(self, book_type):
+        u"""
+        相同类型的 book_type 不同 id merge到一条sql语句中, 比如book_list中,有info_extra='A', info_extra='B'
+        那么merge之后的sql语句为, select * from jianshu_article where info_extra='A' or info_extra='B'
+        :param book_type:
+        :return:
+        """
         book_list = self.book_list[Type.jianshu]
         book = InitialBook()
         info_extra = [item.sql.info_extra for item in book_list]
